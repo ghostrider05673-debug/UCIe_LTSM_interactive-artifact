@@ -135,8 +135,7 @@ const ltsmData = [
         type: "Main State (Error)",
         desc: "Error Recovery State. Safe hold state upon failure.",
         paths: [
-            { target: "RESET", condition: "Software / Controller Reset", type: "reset" },
-            { target: "SBINIT", condition: "Fallback retry", type: "warn" }
+            { target: "RESET", condition: "Software / Controller Reset", type: "reset" }
         ],
         children: []
     }
@@ -359,23 +358,7 @@ function getRenderedTargetId(sourceId, transition) {
 }
 
 function getGraphTransitions(sourceId, paths) {
-    if (sourceId !== 'PHYRETRAIN') return paths;
-
-    const resolutionPaths = paths.filter(path => ['MBTRAIN.REPAIR', 'MBTRAIN.SPEEDIDLE'].includes(path.target));
-    if (resolutionPaths.length < 2) return paths;
-
-    return [
-        ...paths.filter(path => !resolutionPaths.includes(path)),
-        {
-            target: 'MBTRAIN',
-            condition: 'Retrain resolution selects repair or speed degradation',
-            type: 'warn',
-            details: resolutionPaths.map(path => ({
-                target: path.target,
-                condition: path.condition
-            }))
-        }
-    ];
+    return paths;
 }
 
 function getCurveMidpoint(sourcePos, targetPos, curveFactor) {
