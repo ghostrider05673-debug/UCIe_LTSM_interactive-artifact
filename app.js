@@ -158,24 +158,24 @@ const bubblePositions = {
 let showSubstates = false;
 const substatePositions = {
     "MBINIT.PARAM": { x: 110, y: 720, category: "train", substate: true },
-    "MBINIT.CAL": { x: 250, y: 720, category: "train", substate: true },
-    "MBINIT.REPAIRCLK": { x: 390, y: 720, category: "train", substate: true },
-    "MBINIT.REPAIRVAL": { x: 530, y: 720, category: "train", substate: true },
-    "MBINIT.REVERSALMB": { x: 670, y: 720, category: "train", substate: true },
-    "MBINIT.REPAIRMB": { x: 810, y: 720, category: "train", substate: true },
+    "MBINIT.CAL": { x: 260, y: 720, category: "train", substate: true },
+    "MBINIT.REPAIRCLK": { x: 410, y: 720, category: "train", substate: true },
+    "MBINIT.REPAIRVAL": { x: 560, y: 720, category: "train", substate: true },
+    "MBINIT.REVERSALMB": { x: 710, y: 720, category: "train", substate: true },
+    "MBINIT.REPAIRMB": { x: 860, y: 720, category: "train", substate: true },
     "MBTRAIN.VALVREF": { x: 70, y: 540, category: "train", substate: true },
-    "MBTRAIN.DATAVREF": { x: 180, y: 540, category: "train", substate: true },
-    "MBTRAIN.SPEEDIDLE": { x: 290, y: 540, category: "train", substate: true },
-    "MBTRAIN.TXSELFCAL": { x: 400, y: 540, category: "train", substate: true },
-    "MBTRAIN.RXCLKCAL": { x: 510, y: 540, category: "train", substate: true },
-    "MBTRAIN.VALTRAINCENTER": { x: 620, y: 540, category: "train", substate: true },
-    "MBTRAIN.VALTRAINVREF": { x: 730, y: 540, category: "train", substate: true },
-    "MBTRAIN.DATATRAINCENTER1": { x: 840, y: 540, category: "train", substate: true },
-    "MBTRAIN.DATATRAINVREF": { x: 950, y: 540, category: "train", substate: true },
-    "MBTRAIN.RXDESKEW": { x: 1060, y: 540, category: "train", substate: true },
-    "MBTRAIN.DATATRAINCENTER2": { x: 1170, y: 540, category: "train", substate: true },
-    "MBTRAIN.LINKSPEED": { x: 1280, y: 540, category: "train", substate: true },
-    "MBTRAIN.REPAIR": { x: 1280, y: 650, category: "warn", substate: true }
+    "MBTRAIN.DATAVREF": { x: 200, y: 540, category: "train", substate: true },
+    "MBTRAIN.SPEEDIDLE": { x: 330, y: 540, category: "train", substate: true },
+    "MBTRAIN.TXSELFCAL": { x: 460, y: 540, category: "train", substate: true },
+    "MBTRAIN.RXCLKCAL": { x: 590, y: 540, category: "train", substate: true },
+    "MBTRAIN.VALTRAINCENTER": { x: 720, y: 540, category: "train", substate: true },
+    "MBTRAIN.VALTRAINVREF": { x: 850, y: 540, category: "train", substate: true },
+    "MBTRAIN.DATATRAINCENTER1": { x: 980, y: 540, category: "train", substate: true },
+    "MBTRAIN.DATATRAINVREF": { x: 1110, y: 540, category: "train", substate: true },
+    "MBTRAIN.RXDESKEW": { x: 1240, y: 540, category: "train", substate: true },
+    "MBTRAIN.DATATRAINCENTER2": { x: 1370, y: 540, category: "train", substate: true },
+    "MBTRAIN.LINKSPEED": { x: 1500, y: 540, category: "train", substate: true },
+    "MBTRAIN.REPAIR": { x: 1500, y: 660, category: "warn", substate: true }
 };
 const stateMap = {};
 
@@ -186,6 +186,40 @@ function buildMap(nodes) {
     });
 }
 buildMap(ltsmData);
+
+const stateEncodings = {
+    RESET: "5'd0 = h0",
+    SBINIT: "5'd1 = h1",
+    "MBINIT.PARAM": "5'd2 = h2",
+    "MBINIT.CAL": "5'd3 = h3",
+    "MBINIT.REPAIRCLK": "5'd4 = h4",
+    "MBINIT.REPAIRVAL": "5'd5 = h5",
+    "MBINIT.REVERSALMB": "5'd6 = h6",
+    "MBINIT.REPAIRMB": "5'd7 = h7",
+    "MBTRAIN.VALVREF": "5'd8 = h8",
+    "MBTRAIN.DATAVREF": "5'd9 = h9",
+    "MBTRAIN.SPEEDIDLE": "5'd10 = hA",
+    "MBTRAIN.TXSELFCAL": "5'd11 = hB",
+    "MBTRAIN.RXCLKCAL": "5'd12 = hC",
+    "MBTRAIN.VALTRAINCENTER": "5'd13 = hD",
+    "MBTRAIN.VALTRAINVREF": "5'd14 = hE",
+    "MBTRAIN.DATATRAINCENTER1": "5'd15 = hF",
+    "MBTRAIN.DATATRAINVREF": "5'd16 = h10",
+    "MBTRAIN.RXDESKEW": "5'd17 = h11",
+    "MBTRAIN.DATATRAINCENTER2": "5'd18 = h12",
+    "MBTRAIN.LINKSPEED": "5'd19 = h13",
+    "MBTRAIN.REPAIR": "5'd20 = h14",
+    PHYRETRAIN: "5'd21 = h15",
+    LINKINIT: "5'd22 = h16",
+    ACTIVE: "5'd23 = h17",
+    TRAINERROR: "5'd24 = h18",
+    L1: "5'd25 = h19",
+    L2: "5'd26 = h1A",
+    LINKRESET: "5'd27 = h1B",
+    LINKERROR: "5'd28 = h1C",
+    DISABLED: "5'd29 = h1D",
+    RDI_RESET: "5'd30 = h1E"
+};
 
 function switchView(viewId, btnEl) {
     document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
@@ -204,7 +238,7 @@ function setSubstatesVisible(visible) {
     }
     if (svgCanvas) {
         svgCanvas.setAttribute('height', visible ? '820' : '520');
-        svgCanvas.setAttribute('viewBox', visible ? '0 0 1400 820' : '0 0 1200 520');
+        svgCanvas.setAttribute('viewBox', visible ? '0 0 1650 820' : '0 0 1200 520');
         svgCanvas.parentElement.classList.toggle('expanded-graph', visible);
     }
     renderBubbleGraph();
@@ -371,6 +405,10 @@ function getCurveMidpoint(sourcePos, targetPos, curveFactor) {
     };
 }
 
+function getNodeRadius(position) {
+    return position.substate ? 42 : 52;
+}
+
 function getRouteClearance(sourceId, targetId, sourcePos, targetPos, curveFactor, positions) {
     const midpoint = getCurveMidpoint(sourcePos, targetPos, curveFactor);
     let minimumClearance = Infinity;
@@ -382,7 +420,7 @@ function getRouteClearance(sourceId, targetId, sourcePos, targetPos, curveFactor
 
         Object.entries(positions).forEach(([id, position]) => {
             if (id === sourceId || id === targetId) return;
-            const radius = position.substate ? 27 : 36;
+            const radius = getNodeRadius(position);
             minimumClearance = Math.min(minimumClearance, Math.hypot(x - position.x, y - position.y) - radius);
         });
     }
@@ -422,9 +460,13 @@ function renderBubbleGraph() {
         : { ...bubblePositions };
 
     if (showSubstates) {
+        const mbinitHeadingY = substatePositions["MBINIT.PARAM"].y
+            - getNodeRadius(substatePositions["MBINIT.PARAM"]) - 16;
+        const mbtrainHeadingY = substatePositions["MBTRAIN.VALVREF"].y
+            - getNodeRadius(substatePositions["MBTRAIN.VALVREF"]) - 16;
         nodesGroup.innerHTML = `
-            <text class="substate-lane-heading" x="25" y="695">MBINIT substates</text>
-            <text class="substate-lane-heading" x="25" y="515">MBTRAIN substates</text>
+            <text class="substate-lane-heading" x="25" y="${mbinitHeadingY}">MBINIT substates</text>
+            <text class="substate-lane-heading" x="25" y="${mbtrainHeadingY}">MBTRAIN substates</text>
         `;
     }
 
@@ -476,8 +518,8 @@ function renderBubbleGraph() {
                     const midX = (sourcePos.x + targetPos.x) / 2 + normalX * curveFactor;
                     const midY = (sourcePos.y + targetPos.y) / 2 + normalY * curveFactor;
 
-                    const sourceRadius = sourcePos.substate ? 27 : 36;
-                    const targetRadius = targetPos.substate ? 27 : 36;
+                    const sourceRadius = getNodeRadius(sourcePos);
+                    const targetRadius = getNodeRadius(targetPos);
                     const sourceTangentX = midX - sourcePos.x;
                     const sourceTangentY = midY - sourcePos.y;
                     const sourceTangentLength = Math.sqrt(sourceTangentX * sourceTangentX + sourceTangentY * sourceTangentY);
@@ -568,11 +610,15 @@ function renderBubbleGraph() {
         nodeGroup.setAttribute("class", `svg-node category-${pos.category}${pos.substate ? ' substate' : ''}`);
         nodeGroup.setAttribute("data-id", id);
         nodeGroup.setAttribute("transform", `translate(${pos.x}, ${pos.y})`);
+        const nameFit = pos.substate && state.name.length > 9
+            ? ' textLength="72" lengthAdjust="spacingAndGlyphs"'
+            : '';
 
         nodeGroup.innerHTML = `
-            <circle r="${pos.substate ? 27 : 36}"></circle>
-            <text dy="-3" class="node-name">${pos.substate ? state.name : id}</text>
-            <text dy="13" class="node-sub">${pos.substate ? 'Substate' : state.type.split(' ')[0]}</text>
+            <circle r="${getNodeRadius(pos)}"></circle>
+            <text dy="-14" class="node-name"${nameFit}>${pos.substate ? state.name : id}</text>
+            ${stateEncodings[id] ? `<text dy="3" class="node-encoding">${stateEncodings[id]}</text>` : ''}
+            <text dy="21" class="node-sub">${pos.substate ? 'Substate' : state.type.split(' ')[0]}</text>
         `;
 
         // Interactive Focus Effect

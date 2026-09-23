@@ -147,7 +147,7 @@ header p {
 }
 
 .svg-wrapper.expanded-graph svg {
-    min-width: 1400px;
+    min-width: 1650px;
 }
 
 .graph-layout {
@@ -349,12 +349,21 @@ header p {
     stroke-width: 2px;
 }
 
-.svg-node.substate text.node-name { font-size: 7.5px; }
-.svg-node.substate text.node-sub { font-size: 7px; }
+.svg-node.substate text.node-name { font-size: 10.5px; }
+.svg-node.substate text.node-sub { font-size: 9px; }
+
+.svg-node text.node-encoding {
+    fill: #7dd3fc;
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: 800;
+    text-anchor: middle;
+    pointer-events: none;
+}
 
 .svg-node text.node-name {
     fill: #f8fafc;
-    font-size: 10.5px;
+    font-size: 15px;
     font-weight: 700;
     text-anchor: middle;
     pointer-events: none;
@@ -362,7 +371,7 @@ header p {
 
 .svg-node text.node-sub {
     fill: #94a3b8;
-    font-size: 8.5px;
+    font-size: 10px;
     text-anchor: middle;
     pointer-events: none;
 }
