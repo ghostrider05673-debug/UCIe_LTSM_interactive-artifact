@@ -141,6 +141,208 @@ const ltsmData = [
     }
 ];
 
+const stateSpecNotes = {
+    RESET: {
+        source: "UCIe 3.0 Section 4.5.3.1",
+        points: [
+            "The state must be held for at least 4 ms on every entry, allowing PLLs to stabilize and other link-training initialization requirements to be met.",
+            "Exit requires stable supplies and an available 800-MHz sideband clock, together with the trigger and release conditions for the applicable training path."
+        ]
+    },
+    SBINIT: {
+        source: "UCIe 3.0 Section 4.5.3.2",
+        points: [
+            "Initializes and, when applicable, repairs the sideband interface; the procedure runs at 800 MT/s with an 800-MHz sideband clock.",
+            "When Management Transport is supported and SB_MGMT_UP is 1, sideband initialization and repair steps are skipped and only the SBINIT Done request/response handshake is performed."
+        ]
+    },
+    MBINIT: {
+        source: "UCIe 3.0 Section 4.5.3.3",
+        points: [
+            "Initializes the mainband and performs lane repair or width degradation when applicable.",
+            "The defined phases are PARAM, CAL, REPAIRCLK, REPAIRVAL, REVERSALMB, and REPAIRMB."
+        ]
+    },
+    "MBINIT.PARAM": {
+        source: "UCIe 3.0 Section 4.5.3.3.1",
+        points: [
+            "Exchanges PHY setup parameters over sideband, including voltage swing, maximum data rate, and clock mode.",
+            "The partners resolve a common maximum data rate; mainband transmitters remain tri-stated during this phase."
+        ]
+    },
+    "MBINIT.CAL": {
+        source: "UCIe 3.0 Section 4.5.3.3.2",
+        points: [
+            "Performs needed transmitter and receiver calibration; the specification gives transmitter duty-cycle correction, receiver offset, and Vref calibration as examples.",
+            "The calibration steps may be implementation-specific, and completion is coordinated by a sideband Done request/response handshake."
+        ]
+    },
+    "MBINIT.REPAIRCLK": {
+        source: "UCIe 3.0 Section 4.5.3.3.3",
+        points: [
+            "For Advanced Package, detects and applies repair to clock and track lanes when needed; for Standard Package, it checks clock and track lane functionality.",
+            "The procedure differs by package, including the use of redundant physical lanes for Advanced Package."
+        ]
+    },
+    "MBINIT.REPAIRVAL": {
+        source: "UCIe 3.0 Section 4.5.3.3.4",
+        points: [
+            "Checks Valid-lane functionality and, for Advanced Package, detects and applies Valid-lane repair when needed; Standard Package performs the functional check.",
+            "This phase follows clock/track checking and precedes Data Lane reversal detection."
+        ]
+    },
+    "MBINIT.REVERSALMB": {
+        source: "UCIe 3.0 Section 4.5.3.3.5",
+        points: [
+            "Entered only when the Clock and Valid lanes are functional; it detects Data Lane reversal.",
+            "The following MBINIT.REPAIRMB phase is entered only after lane-reversal detection and application succeed."
+        ]
+    },
+    "MBINIT.REPAIRMB": {
+        source: "UCIe 3.0 Section 4.5.3.3.6",
+        points: [
+            "Entered after successful lane-reversal detection and application; checks mainband data lanes and applies the applicable repair or width-degradation procedure.",
+            "The specification distinguishes lane repair for Advanced Package from lane-map/width-degradation handling for Standard Package."
+        ]
+    },
+    MBTRAIN: {
+        source: "UCIe 3.0 Section 4.5.3.4",
+        points: [
+            "Sets up operational speed and performs clock-to-data centering; additional calibration, including Rx clock correction and Tx/Rx deskew, may be needed at higher speeds.",
+            "Partners coordinate substate entry and exit with sideband handshakes; a substate action that is not needed may be skipped using its defined handshake."
+        ]
+    },
+    "MBTRAIN.VALVREF": {
+        source: "UCIe 3.0 Section 4.5.3.4.1",
+        points: [
+            "Optimizes receiver Vref for incoming Valid at the lowest supported mainband data rate, 4 GT/s.",
+            "The training uses the VALTRAIN pattern and receiver-initiated Data-to-Clock point tests and/or eye-width sweeps."
+        ]
+    },
+    "MBTRAIN.DATAVREF": {
+        source: "UCIe 3.0 Section 4.5.3.4.2",
+        points: [
+            "Optimizes receiver Vref for incoming mainband data at the lowest supported data rate, 4 GT/s.",
+            "This phase precedes SPEEDIDLE, where the link changes to the selected operating rate."
+        ]
+    },
+    "MBTRAIN.SPEEDIDLE": {
+        source: "UCIe 3.0 Section 4.5.3.4.3",
+        points: [
+            "An electrical-idle phase used for frequency changes; clock receivers remain enabled while data, Valid, and Track transmitters are held low.",
+            "The target rate depends on the entry path: highest common rate after DATAVREF, last ACTIVE rate after L1, or the next lower rate on a speed-degrade path when the current rate is above 4 GT/s."
+        ]
+    },
+    "MBTRAIN.TXSELFCAL": {
+        source: "UCIe 3.0 Section 4.5.3.4.4",
+        points: [
+            "The module calibrates its own circuit parameters independently of its partner; transmitter-related calibration may be implementation-specific.",
+            "The phase completes with a sideband Done request/response handshake before RXCLKCAL."
+        ]
+    },
+    "MBTRAIN.RXCLKCAL": {
+        source: "UCIe 3.0 Section 4.5.3.4.5",
+        points: [
+            "Calibrates the receiver clock path; above 32 GT/s, the receiver may perform I/Q correction on the received quarter-rate clock.",
+            "For that correction, the receiver can request a relative TCKN_L/TCKP_L shift from its partner over sideband."
+        ]
+    },
+    "MBTRAIN.VALTRAINCENTER": {
+        source: "UCIe 3.0 Section 4.5.3.4.6",
+        points: [
+            "Performs Valid-to-clock training before data-lane training to ensure the Valid signal is functional.",
+            "The receiver samples the Valid training pattern using the forwarded clock."
+        ]
+    },
+    "MBTRAIN.VALTRAINVREF": {
+        source: "UCIe 3.0 Section 4.5.3.4.7",
+        points: [
+            "The module is permitted to optionally optimize receiver Vref for incoming Valid at the operating data rate."
+        ]
+    },
+    "MBTRAIN.DATATRAINCENTER1": {
+        source: "UCIe 3.0 Section 4.5.3.4.8",
+        points: [
+            "Performs Data-to-Clock training, including Valid; the specification requires the LFSR patterns defined in Section 4.4.1 for this phase."
+        ]
+    },
+    "MBTRAIN.DATATRAINVREF": {
+        source: "UCIe 3.0 Section 4.5.3.4.9",
+        points: [
+            "Optionally optimizes receiver Vref for incoming data at the operating rate; this step is implementation-specific."
+        ]
+    },
+    "MBTRAIN.RXDESKEW": {
+        source: "UCIe 3.0 Section 4.5.3.4.10",
+        points: [
+            "The module may optionally perform per-lane deskew on its receivers to improve timing margin.",
+            "Above 32 GT/s, the module is permitted to request a transmitter equalization preset from its partner."
+        ]
+    },
+    "MBTRAIN.DATATRAINCENTER2": {
+        source: "UCIe 3.0 Section 4.5.3.4.11",
+        points: [
+            "Recenters the clock to aggregate data when the partner receiver performed per-lane deskew."
+        ]
+    },
+    "MBTRAIN.LINKSPEED": {
+        source: "UCIe 3.0 Section 4.5.3.4.12",
+        points: [
+            "Checks link stability at the operating data rate and resolves the applicable lane-error, repair, speed-degrade, or retrain outcome.",
+            "After successful completion and the Done handshake, both partners enable their transmitters and receivers and exit to LINKINIT."
+        ]
+    },
+    "MBTRAIN.REPAIR": {
+        source: "UCIe 3.0 Section 4.5.3.4.13",
+        points: [
+            "Applies the package-appropriate recovery: lane repair for Advanced Package or width degradation for Standard Package.",
+            "After the repair handshake completes, the state sequence returns to TXSELFCAL."
+        ]
+    },
+    LINKINIT: {
+        source: "UCIe 3.0 Section 4.5.3.5",
+        points: [
+            "Allows the die-to-die Adapter to complete initial link management before RDI enters Active.",
+            "Track, Data, and Valid transmitters are held low in this state."
+        ]
+    },
+    ACTIVE: {
+        source: "UCIe 3.0 Section 4.5.3.6",
+        points: [
+            "Physical-layer initialization is complete, RDI is Active, and packets from upper layers can be exchanged between the dies.",
+            "Data in this state is scrambled using the scrambler LFSR defined in Section 4.4.1."
+        ]
+    },
+    PHYRETRAIN: {
+        source: "UCIe 3.0 Section 4.5.3.7",
+        points: [
+            "Entry triggers include Adapter-directed retrain, a local PHY-detected Valid framing error, a remote-die request, or a Runtime Link Test Control change during LINKSPEED.",
+            "Track, Data, and Valid transmitters are held low while the retrain sequence is carried out."
+        ]
+    },
+    L1: {
+        source: "UCIe 3.0 Section 4.5.3.9",
+        points: [
+            "L1/L2 are power-management states below the ACTIVE state's dynamic clock-gating level; Data, Valid, Clock, and Track transmitters are tri-stated.",
+            "An L1 exit returns the PHY to MBTRAIN.SPEEDIDLE and is coordinated with the RDI L1 exit."
+        ]
+    },
+    L2: {
+        source: "UCIe 3.0 Sections 4.5.3.9 and 4.5.3.9.1",
+        points: [
+            "L2 exit returns the PHY to RESET; link initialization and training then restart from the reset exit flow.",
+            "Sideband power-down in L2 is an optional negotiated feature, not an unconditional L2 behavior."
+        ]
+    },
+    TRAINERROR: {
+        source: "UCIe 3.0 Section 4.5.3.8",
+        points: [
+            "A transitional state for events that require return to RESET or take the link from Link Up to Link Down.",
+            "When sideband is active, entry uses the TRAINERROR handshake; if no response arrives within 8 ms, the LTSM transitions to TRAINERROR. Exit to RESET is implementation-specific, and the state is required while RDI is in LinkError."
+        ]
+    }
+};
+
 // Layout Geometry for Main Diagram
 const bubblePositions = {
     "RESET": { x: 100, y: 150, category: "init" },
@@ -290,6 +492,21 @@ function selectState(stateId) {
 
     document.getElementById('stateName').textContent = `${state.name} (${state.id})`;
     document.getElementById('stateDesc').textContent = state.desc;
+
+    const specNotes = stateSpecNotes[stateId];
+    const specCard = document.getElementById('stateSpecCard');
+    const specSource = document.getElementById('stateSpecSource');
+    const specPoints = document.getElementById('stateSpecPoints');
+    specPoints.innerHTML = '';
+    specCard.hidden = !specNotes;
+    if (specNotes) {
+        specSource.textContent = specNotes.source;
+        specNotes.points.forEach(point => {
+            const item = document.createElement('li');
+            item.textContent = point;
+            specPoints.appendChild(item);
+        });
+    }
 
     const outgoingContainer = document.getElementById('outgoingPaths');
     outgoingContainer.innerHTML = '';

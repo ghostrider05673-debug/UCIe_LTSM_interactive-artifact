@@ -526,6 +526,39 @@ header p {
     padding: 20px;
 }
 
+.state-spec-notes {
+    margin: 18px 0;
+    padding: 14px 0;
+    border-block: 1px solid var(--border-color);
+}
+
+.state-spec-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+}
+
+.state-spec-heading h4 {
+    margin: 0;
+    color: var(--accent-blue);
+}
+
+#stateSpecSource {
+    color: var(--text-sub);
+    font-size: 0.78rem;
+}
+
+#stateSpecPoints {
+    margin: 10px 0 0;
+    padding-left: 20px;
+    color: var(--text-sub);
+    line-height: 1.5;
+}
+
+#stateSpecPoints li + li { margin-top: 8px; }
+
 .node-header {
     padding: 8px;
     border-radius: 4px;
@@ -611,4 +644,25 @@ header p {
 .svg-node.active-target .node-name {
     fill: #ffffff;
     font-weight: 900;
+}
+
+@media (max-width: 720px) {
+    .tab-navigation {
+        flex-wrap: wrap;
+    }
+
+    .split-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .tree-container {
+        max-height: 40vh;
+        overflow-y: auto;
+    }
+
+    .details-panel {
+        min-width: 0;
+        padding: 16px;
+    }
 }
