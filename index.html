@@ -18,6 +18,7 @@
         <button class="tab-btn active" onclick="switchView('graph-view', this)">Bubble Graph</button>
         <button class="tab-btn" onclick="switchView('tree-view', this)">Tree Hierarchy</button>
         <button class="tab-btn" onclick="switchView('matrix-view', this)">Transition Matrix</button>
+        <button class="tab-btn" onclick="switchView('sideband-view', this)">Sideband Messages</button>
     </div>
 
     <main class="content-container">
@@ -87,6 +88,14 @@
                 </thead>
                 <tbody id="matrixTableBody"></tbody>
             </table>
+        </div>
+
+        <div id="sideband-view" class="view-content">
+            <iframe
+                class="reference-frame"
+                src="UCIe_3.0_Chapter7_Sideband_Messages%201.html"
+                title="UCIe 3.0 Chapter 7 Sideband Message Reference"
+                loading="lazy"></iframe>
         </div>
 
     </main>
