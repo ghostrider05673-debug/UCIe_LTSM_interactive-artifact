@@ -2,6 +2,10 @@
 
 A small, browser-based reference for exploring the UCIe Link Training and Status State Machine (LTSM). It presents the state flow in interactive diagrams and tables, alongside a local reference for UCIe 3.0 sideband messages.
 
+## Use the Website
+
+The site is already deployed and ready to use: [UCIe LTSM State Machine Explorer](https://ghostrider05673-debug.github.io/UCIe_LTSM_interactive-artifact/). Visitors do not need to clone the repository, install anything, or deploy the project.
+
 ## What You Can Do
 
 - **Bubble Graph:** Explore state transitions, hover over arrows to read conditions, click a state for details, and filter transitions by category.
@@ -10,9 +14,9 @@ A small, browser-based reference for exploring the UCIe Link Training and Status
 - **Transition Matrix:** Scan transitions as a table of source, target, type, and trigger condition.
 - **Sideband Messages:** Open the bundled UCIe 3.0 Chapter 7 sideband-message reference.
 
-## Run Locally
+## Run Locally (Optional)
 
-No build step, package installation, or framework is required. Clone or download the repository, then serve the project directory with a local web server. For example, with Python installed:
+Local setup is only needed to develop or test changes. No build step, package installation, or framework is required. Clone or download the repository, then serve the project directory with a local web server. For example, with Python installed:
 
 ```powershell
 py -m http.server 8000
@@ -22,14 +26,9 @@ Open <http://localhost:8000> in a browser. Stop the server with `Ctrl+C`.
 
 You can also open `index.html` directly in a browser. Serving the files locally is recommended so the bundled sideband reference loads consistently.
 
-## Publish with GitHub Pages
+## Deployment (Maintainers)
 
-This is a static site deployed with the repository's GitHub Actions workflow at `.github/workflows/static.yml`:
-
-1. Push the project to GitHub with the workflow on the `main` branch.
-2. In the repository, open **Settings → Pages** and set the deployment source to **GitHub Actions** if it is not already selected.
-3. The workflow deploys on pushes to `main`; it can also be started manually from the **Actions** tab.
-4. Open the published URL shown in the Pages settings or the deployment summary.
+The live site is already published. Maintainers can update it by pushing changes to `main`; the GitHub Actions workflow at `.github/workflows/static.yml` deploys the static site automatically. The workflow can also be started manually from the repository's **Actions** tab.
 
 The workflow publishes the repository root. Keep the HTML, CSS, JavaScript, and bundled reference files together there; the app uses relative paths to load them.
 
